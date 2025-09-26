@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<layers>
+  <layer remove="True"
+         name="senaite.registries"
+         interface="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
+</layers>

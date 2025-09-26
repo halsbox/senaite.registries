@@ -1,0 +1,23 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="senaite.registries">
+
+  <plone:static
+      directory="static"
+      type="plone"
+      name="senaite.registries.static"/>
+
+  <include package=".theme"/>
+  <include package=".registry" />
+  <include package=".journal" />
+
+  <browser:page
+      for="*"
+      name="users_search"
+      class=".users.UsersSearch"
+      permission="zope2.View"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer" />
+
+</configure>

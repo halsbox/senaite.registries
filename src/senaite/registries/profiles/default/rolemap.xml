@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<rolemap>
+  <permissions>
+    <!-- All permissions will be inherited from senaite.core and Plone -->
+  </permissions>
+</rolemap>

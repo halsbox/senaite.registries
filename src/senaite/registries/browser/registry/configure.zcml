@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="senaite.registries">
+
+  <browser:page
+      for="senaite.registries.interfaces.IJournalRegistry"
+      name="view"
+      class=".view.JournalRegistryView"
+      permission="zope2.View"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer" />
+</configure>

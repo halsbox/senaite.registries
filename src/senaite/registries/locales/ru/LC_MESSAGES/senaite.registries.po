@@ -1,0 +1,123 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2025-09-25 21:38+0000\n"
+"PO-Revision-Date: 2025-09-25 21:38+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Russian (Russia) (https://app.transifex.com/senaite/teams/87045/ru_RU/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: DOMAIN\n"
+"Language: ru_RU\n"
+
+#: senaite/registries/profiles/default/types/Journal.xml
+msgid "A Journal record."
+msgstr "Запись журнала."
+
+#: senaite/registries/profiles/default/types/JournalRegistry.xml
+msgid "A registry for Journal entries."
+msgstr "Реестр записей журнала."
+
+#: senaite/registries/browser/registry/view.py:40
+msgid "Actions"
+msgstr "Действия"
+
+#: senaite/registries/browser/registry/view.py:25
+msgid "Add journal"
+msgstr "Добавить журнал"
+
+#: senaite/registries/browser/registry/view.py:44
+msgid "All"
+msgstr "Все"
+
+#: senaite/registries/browser/registry/view.py:67
+msgid "Delete"
+msgstr "Удалить"
+
+#: senaite/registries/browser/registry/view.py:65
+msgid "Edit"
+msgstr "Редактировать"
+
+#: senaite/registries/browser/journal/templates/view.pt:20
+#: senaite/registries/browser/registry/view.py:35
+msgid "End date"
+msgstr "Дата окончания"
+
+#: senaite/registries/profiles/default/types/Journal.xml
+msgid "Journal"
+msgstr "Журнал"
+
+#: senaite/registries/profiles/default/types/JournalRegistry.xml
+msgid "Journal Registry"
+msgstr "Реестр журналов"
+
+#: senaite/registries/content/journal.py:25
+msgid "Journal number between 1 and 100"
+msgstr "Номер журнала от 1 до 100"
+
+#: senaite/registries/browser/journal/templates/view.pt:14
+#: senaite/registries/browser/registry/view.py:33
+#: senaite/registries/content/journal.py:24
+msgid "Number"
+msgstr "Номер"
+
+#: senaite/registries/profiles/default/types/RegistriesRootFolder.xml
+msgid "Registries"
+msgstr "Реестры"
+
+#: senaite/registries/browser/journal/templates/view.pt:23
+#: senaite/registries/browser/registry/view.py:36
+msgid "Responsible"
+msgstr "Ответственный"
+
+#: senaite/registries/profiles/default/types/RegistriesRootFolder.xml
+msgid "Root folder for registries"
+msgstr "Корневая папка для реестров"
+
+#: senaite/registries/content/journal.py:33
+msgid "Start Date"
+msgstr "Дата начала"
+
+#: senaite/registries/browser/journal/templates/view.pt:17
+#: senaite/registries/browser/registry/view.py:34
+msgid "Start date"
+msgstr "Дата начала"
+
+#: senaite/registries/browser/journal/templates/view.pt:26
+#: senaite/registries/browser/registry/view.py:37
+msgid "Storage (active)"
+msgstr "Хранение (активный)"
+
+#: senaite/registries/browser/journal/templates/view.pt:32
+#: senaite/registries/browser/registry/view.py:39
+msgid "Storage (archive)"
+msgstr "Хранение (архив)"
+
+#: senaite/registries/browser/journal/templates/view.pt:29
+msgid "Storage (before archive)"
+msgstr "Хранение (до архивации)"
+
+#: senaite/registries/browser/registry/view.py:38
+msgid "Storage (pre-archive)"
+msgstr "Хранение (до архивации)"
+
+#: senaite/registries/browser/registry/view.py:32
+msgid "Title"
+msgstr "Название"
+
+#: senaite/registries/browser/registry/view.py:63
+msgid "View"
+msgstr "Просмотр"
+
+#: senaite/registries/browser/common.py:11
+msgid "№ ${number}"
+msgstr "№ ${number}"
+
+#: senaite/registries/browser/common.py:12
+msgid "№ n/a"
+msgstr "№ н/д"

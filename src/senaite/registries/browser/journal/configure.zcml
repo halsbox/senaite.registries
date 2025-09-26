@@ -1,0 +1,29 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="senaite.registries">
+
+  <browser:page
+      name="view"
+      for="senaite.registries.interfaces.IJournal"
+      class=".view.JournalView"
+      template="templates/view.pt"
+      permission="zope2.View"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
+
+  <browser:page
+      name="++add++Journal"
+      for="*"
+      class=".add.JournalAddView"
+      permission="cmf.AddPortalContent"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
+
+  <browser:page
+      name="edit"
+      for="senaite.registries.interfaces.IJournal"
+      class=".edit.JournalEditForm"
+      permission="cmf.ModifyPortalContent"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
+
+</configure>
