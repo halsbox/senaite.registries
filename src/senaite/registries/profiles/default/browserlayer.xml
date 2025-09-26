@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <layers>
   <layer name="senaite.registries"
-         interface="senaite.registries.interfaces.ISenaiteRegistriesLayer" />
+         interface="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
 </layers>

@@ -25,9 +25,9 @@
   <property name="schema">senaite.registries.content.registries_root_folder.IRegistriesRootFolderSchema</property>
   <property name="klass">senaite.registries.content.registries_root_folder.RegistriesRootFolder</property>
   <property name="behaviors">
-      <element value="plone.app.content.interfaces.INameFromTitle"/>
-      <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
-      <element value="plone.app.referenceablebehavior.referenceable.IReferenceable"/>
+    <element value="plone.app.content.interfaces.INameFromTitle"/>
+    <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
+    <element value="plone.app.referenceablebehavior.referenceable.IReferenceable"/>
   </property>
   <alias from="(Default)" to="(dynamic view)"/>
   <alias from="view" to="view"/>

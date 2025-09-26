@@ -8,5 +8,5 @@
       name="view"
       class=".view.JournalRegistryView"
       permission="zope2.View"
-      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer" />
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
 </configure>

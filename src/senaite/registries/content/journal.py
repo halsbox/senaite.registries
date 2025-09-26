@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from plone import api as ploneapi
 from plone.autoform import directives
-from senaite.registries import messageFactory as _
 from plone.supermodel import model
 from zope import schema
 from zope.interface import implementer
@@ -14,6 +13,7 @@ from senaite.core.z3cform.widgets.datetimewidget import DatetimeWidget
 from senaite.core.z3cform.widgets.number import IntFieldWidget as NumberWidgetFactory
 from senaite.core.z3cform.widgets.queryselect import QuerySelectWidgetFactory
 from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
+from senaite.registries import messageFactory as _
 from senaite.registries.interfaces import IJournal
 
 

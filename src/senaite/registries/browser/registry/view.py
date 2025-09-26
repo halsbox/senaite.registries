@@ -2,10 +2,13 @@
 import collections
 from plone import api as ploneapi
 from senaite.app.listing.view import ListingView
+
 from bika.lims import api
 from bika.lims.utils import get_link
 from senaite.registries import messageFactory as _
-from senaite.registries.browser.common import format_number, format_date, storage_title, title_with_desc, fullname_for_userid
+from senaite.registries.browser.common import format_number, format_date, storage_title, title_with_desc, \
+  fullname_for_userid
+
 
 class JournalRegistryView(ListingView):
   def __init__(self, context, request):
@@ -51,14 +54,14 @@ class JournalRegistryView(ListingView):
     obj = api.get_object(obj)
     url = api.get_url(obj)
 
-    item["replace"]["Title"]  = title_with_desc(obj)
-    item["Number"]            = format_number(getattr(obj, "number", None))
-    item["StartDate"]         = format_date(getattr(obj, "start_date", None), long_format=False, view=self)
-    item["EndDate"]           = format_date(getattr(obj, "end_date", None), long_format=False, view=self)
-    item["Responsible"]       = fullname_for_userid(getattr(obj, "responsible", None))
-    item["StorageActive"]     = storage_title(getattr(obj, "storage_location_active", None))
+    item["replace"]["Title"] = title_with_desc(obj)
+    item["Number"] = format_number(getattr(obj, "number", None))
+    item["StartDate"] = format_date(getattr(obj, "start_date", None), long_format=False, view=self)
+    item["EndDate"] = format_date(getattr(obj, "end_date", None), long_format=False, view=self)
+    item["Responsible"] = fullname_for_userid(getattr(obj, "responsible", None))
+    item["StorageActive"] = storage_title(getattr(obj, "storage_location_active", None))
     item["StoragePreArchive"] = storage_title(getattr(obj, "storage_location_pre_archive", None))
-    item["StorageArchive"]    = storage_title(getattr(obj, "storage_location_archive", None))
+    item["StorageArchive"] = storage_title(getattr(obj, "storage_location_archive", None))
 
     actions = [get_link(url, value=_("View"))]
     if api.security.check_permission("cmf.ModifyPortalContent", obj):

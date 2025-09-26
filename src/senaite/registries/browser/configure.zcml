@@ -10,14 +10,14 @@
       name="senaite.registries.static"/>
 
   <include package=".theme"/>
-  <include package=".registry" />
-  <include package=".journal" />
+  <include package=".registry"/>
+  <include package=".journal"/>
 
   <browser:page
       for="*"
       name="users_search"
       class=".users.UsersSearch"
       permission="zope2.View"
-      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer" />
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
 
 </configure>
