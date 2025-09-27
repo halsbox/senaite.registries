@@ -25,4 +25,11 @@
       permission="cmf.ModifyPortalContent"
       layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
 
+  <browser:page
+      name="journal_import_api"
+      for="senaite.registries.interfaces.IJournalRegistry"
+      class=".api.JournalImportAPI"
+      permission="cmf.AddPortalContent"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
+  
 </configure>

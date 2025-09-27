@@ -1,0 +1,21 @@
+services:
+  lims:
+    image: senaite/senaite:edge
+    restart: always
+    ports:
+      - 8080:8080
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2048MB
+    volumes:
+      - "${SENAITE_DATA:-./data}:/data"
+    environment:
+      ADDONS: senaite.registries
+      SOURCES: "senaite.registries=git https://github.com/halsbox/senaite.registries.git branch=main"
+      PASSWORD: ${ADMIN_PASSWORD:-admin}
+  memcached:
+    image: memcached:latest
+    command: ["memcached", "-m", "64"]
+    restart: always

@@ -75,3 +75,37 @@ def storage_title(uid_or_list):
   except Exception:
     logger.info("storage_title: Exception")
     return u""
+
+def stringify_exception(e):
+  # Do NOT call unicode(e) directly; build from args safely
+  cls = e.__class__.__name__
+  parts = []
+  for a in getattr(e, "args", ()):
+    try:
+      parts.append(api.safe_unicode(a))
+    except Exception:
+      try:
+        parts.append(api.safe_unicode(repr(a)))
+      except Exception:
+        parts.append(u"<unprintable>")
+  return u"{}: {}".format(cls, u" ".join(parts)) if parts else api.safe_unicode(cls)
+
+def normalize(value, default=u""):
+  return api.safe_unicode(value).strip() if value is not None else default
+
+def json_default(obj):
+  # Best-effort Unicode conversion; final fallback to repr
+  try:
+    return api.safe_unicode(obj)
+  except Exception:
+    try:
+      return api.safe_unicode(repr(obj))
+    except Exception:
+      return u"<unserializable>"
+
+def get_bool(val):
+  if isinstance(val, bool):
+    return val
+  if isinstance(val, string_types):  # CHANGED
+    return val.strip().lower() in ("1", "true", "yes", "y", "on")
+  return False
