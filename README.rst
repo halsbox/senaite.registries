@@ -99,7 +99,7 @@ Overview
 - Content-Type: application/json
 - Permission: cmf.AddPortalContent on the target Journal Registry
 - CSRF: disabled for this endpoint (API-only usage)
-- Dry-run: "?dry_run=true" querystring or {"dry_run": true} in the payload
+- Dry-run: "?dry_run=true" querystring
 
 
 Payload
@@ -128,7 +128,6 @@ Payload
 .. code-block:: json
 
   {
-    "dry_run": true,
     "items": [
       { "...": "..." }
     ]
