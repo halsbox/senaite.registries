@@ -6,6 +6,11 @@ from bika.lims import api
 from senaite.core.api import dtime
 from senaite.registries import messageFactory as _
 
+def u(value):
+  return api.safe_unicode(value)
+
+def icon_url(name):
+  return "{}/senaite_theme/icon/{}".format(ploneapi.portal.get().absolute_url(), name)
 
 def format_number(number):
   """Return localized '№ <number>' or '№ n/a'."""
@@ -35,22 +40,14 @@ def format_date(dt, long_format=False, view=None, context=None):
   return dtime.to_localized_time(zdt, long_format=bool(long_format))
 
 
-def title_with_desc(obj):
-  """HTML title with optional description (used in listings)."""
-  title = api.safe_unicode(api.get_title(obj))
-  desc = api.safe_unicode(api.get_description(obj))
-  desc_html = u"<div class='text-muted small'><em>{}</em></div>".format(desc) if desc else u""
-  return u"<div>{}</div>{}".format(title, desc_html)
-
-
 def fullname_for_userid(userid):
   if not userid:
     return u""
   user = ploneapi.user.get(userid=userid)
   if not user:
-    return api.safe_unicode(userid)
+    return u(userid)
   fullname = user.getProperty("fullname") or user.getUserName()
-  return api.safe_unicode(fullname)
+  return u(fullname)
 
 
 def storage_title(uid_or_list):
@@ -62,7 +59,7 @@ def storage_title(uid_or_list):
     target = api.get_object(uid)
   except Exception:
     return u""
-  return api.safe_unicode(api.get_title(target) or api.get_id(target))
+  return u(api.get_title(target) or api.get_id(target))
 
 
 def stringify_exception(e):
@@ -71,27 +68,27 @@ def stringify_exception(e):
   parts = []
   for a in getattr(e, "args", ()):
     try:
-      parts.append(api.safe_unicode(a))
+      parts.append(u(a))
     except Exception:
       try:
-        parts.append(api.safe_unicode(repr(a)))
+        parts.append(u(repr(a)))
       except Exception:
         parts.append(u"<unprintable>")
-  return u"{}: {}".format(cls, u" ".join(parts)) if parts else api.safe_unicode(cls)
+  return u"{}: {}".format(cls, u" ".join(parts)) if parts else u(cls)
 
 
 def normalize(value, default=u""):
   """Return safe Unicode stripped string or default if value is None."""
-  return api.safe_unicode(value).strip() if value is not None else default
+  return u(value).strip() if value is not None else default
 
 
 def json_default(obj):
   """Default serializer for json.dumps to ensure safe unicode output."""
   try:
-    return api.safe_unicode(obj)
+    return u(obj)
   except Exception:
     try:
-      return api.safe_unicode(repr(obj))
+      return u(repr(obj))
     except Exception:
       return u"<unserializable>"
 

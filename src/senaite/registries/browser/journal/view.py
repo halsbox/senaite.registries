@@ -2,7 +2,12 @@
 from Products.Five import BrowserView
 from plone import api as ploneapi
 
-from senaite.registries.browser.common import format_number, format_date, fullname_for_userid, storage_title
+from senaite.registries.browser.common import (
+  format_number,
+  format_date,
+  fullname_for_userid,
+  storage_title
+)
 
 
 class JournalView(BrowserView):
