@@ -1,0 +1,27 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="senaite.registries">
+
+  <!-- Manage-level permission -->
+  <permission id="senaite.registries.permissions.ManageRegistries"
+              title="senaite.registries: Manage Registries"/>
+
+  <!-- Add content -->
+  <permission id="senaite.registries.permissions.AddJournal"
+              title="senaite.registries: Add Journal"/>
+
+  <!-- Field-level -->
+  <permission id="senaite.registries.permissions.FieldEditResponsible"
+              title="senaite.registries: Field: Edit Responsible"/>
+
+  <!-- Transition permissions -->
+  <permission id="senaite.registries.permissions.TransitionStartUsing"
+              title="senaite.registries: Transition: Start Using"/>
+  <permission id="senaite.registries.permissions.TransitionEndUsing"
+              title="senaite.registries: Transition: End Using"/>
+  <permission id="senaite.registries.permissions.TransitionArchive"
+              title="senaite.registries: Transition: Archive"/>
+  <permission id="senaite.registries.permissions.TransitionUnarchive"
+              title="senaite.registries: Transition: Unarchive"/>
+
+</configure>

@@ -10,6 +10,7 @@
       name="senaite.registries.static"/>
 
   <include package=".theme"/>
+  <include package=".root"/>
   <include package=".registry"/>
   <include package=".journal"/>
 

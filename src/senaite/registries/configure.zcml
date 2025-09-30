@@ -9,7 +9,14 @@
   <i18n:registerTranslations directory="locales"/>
   <cmf:registerDirectory name="types" directory="profiles/default/types"/>
 
+  <include package="senaite.core.permissions"/>
+
+  <include file="permissions.zcml"/>
+
+  <include package=".adapters"/>
   <include package=".browser"/>
+  <include package=".catalog"/>
+  <include package=".subscribers"/>
 
   <genericsetup:registerProfile
       name="default"

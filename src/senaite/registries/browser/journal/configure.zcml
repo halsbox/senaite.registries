@@ -12,13 +12,6 @@
       layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
 
   <browser:page
-      name="++add++Journal"
-      for="*"
-      class=".add.JournalAddView"
-      permission="cmf.AddPortalContent"
-      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
-
-  <browser:page
       name="edit"
       for="senaite.registries.interfaces.IJournal"
       class=".edit.JournalEditForm"
@@ -31,5 +24,18 @@
       class=".api.JournalImportAPI"
       permission="cmf.AddPortalContent"
       layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
-  
+
+  <adapter
+      for="Products.CMFCore.interfaces.IFolderish
+           senaite.registries.interfaces.ISenaiteRegistriesLayer
+           plone.dexterity.interfaces.IDexterityFTI"
+      provides="zope.publisher.interfaces.browser.IBrowserPage"
+      factory=".add.JournalAddView"
+      name="Journal"/>
+
+  <class class=".add.JournalAddView">
+    <require
+        permission="senaite.registries.permissions.AddJournal"
+        interface="zope.publisher.interfaces.browser.IBrowserPage"/>
+  </class>
 </configure>

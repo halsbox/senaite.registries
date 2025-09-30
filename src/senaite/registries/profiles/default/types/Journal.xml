@@ -18,12 +18,14 @@
     <element value="view"/>
   </property>
   <property name="default_view_fallback">False</property>
-  <property name="add_permission">cmf.AddPortalContent</property>
+  <property name="add_permission">senaite.registries.permissions.AddJournal</property>
   <property name="schema">senaite.registries.content.journal.IJournalSchema</property>
   <property name="klass">senaite.registries.content.journal.Journal</property>
   <property name="behaviors">
     <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
     <element value="plone.app.referenceablebehavior.referenceable.IReferenceable"/>
+    <element value="bika.lims.interfaces.IAutoGenerateID"/>
+    <element value="bika.lims.interfaces.IMultiCatalogBehavior"/>
   </property>
   <alias from="view" to="view"/>
   <alias from="edit" to="@@edit"/>

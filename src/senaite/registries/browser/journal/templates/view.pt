@@ -1,37 +1,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:metal="http://xml.zope.org/namespaces/metal"
-         i18n:domain="senaite.registries"
-         metal:use-macro="here/main_template/macros/master">
+     i18n:domain="senaite.registries"
+     metal:use-macro="here/main_template/macros/master">
 <head>
-    <metal:block fill-slot="senaite_legacy_resources"
-             tal:define="portal context/@@plone_portal_state/portal;" />
+  <metal:block fill-slot="senaite_legacy_resources"
+       tal:define="portal context/@@plone_portal_state/portal;" />
 </head>
 <body>
 <metal:content fill-slot="content-core">
-    <div class="documentEditable">
-        <dl class="row">
-            <dt class="col-sm-2" i18n:translate="">Number</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_number">№</dd>
+  <div class="documentEditable">
+    <dl class="row">
+      <dt class="col-sm-2" i18n:translate="">Number</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_number">№</dd>
 
-            <dt class="col-sm-2" i18n:translate="">Start date</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_start_date" />
+      <dt class="col-sm-2" i18n:translate="">Start date</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_start_date" />
 
-            <dt class="col-sm-2" i18n:translate="">End date</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_end_date" />
+      <dt class="col-sm-2" i18n:translate="">End date</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_end_date" />
 
-            <dt class="col-sm-2" i18n:translate="">Responsible</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_responsible" />
+      <dt class="col-sm-2" i18n:translate="">Responsible</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_responsible" />
 
-            <dt class="col-sm-2" i18n:translate="">Storage (active)</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_storage_location_active" />
+      <dt class="col-sm-2" i18n:translate="">Storage (active)</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_storage_location_active" />
 
-            <dt class="col-sm-2" i18n:translate="">Storage (before archive)</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_storage_location_pre_archive" />
+      <dt class="col-sm-2" i18n:translate="">Storage (before archive)</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_storage_location_pre_archive" />
 
-            <dt class="col-sm-2" i18n:translate="">Storage (archive)</dt>
-            <dd class="col-sm-10" tal:content="view/formatted_storage_location_archive" />
-        </dl>
-    </div>
+      <dt class="col-sm-2" i18n:translate="">Storage (archive)</dt>
+      <dd class="col-sm-10" tal:content="view/formatted_storage_location_archive" />
+
+      <dt class="col-sm-2" i18n:translate="">Attachment</dt>
+      <dd class="col-sm-10" tal:define="att view/attachment">
+        <tal:has tal:condition="att">
+          <a tal:attributes="href att/url" tal:content="att/filename">filename.pdf</a>
+          <span class="text-muted small" tal:condition="python: att.get('size_bytes', 0)">
+                  (<tal:size replace="python: '{:.1f} KB'.format(att['size_bytes']/1024.0)"/>)
+                </span>
+        </tal:has>
+        <span class="text-muted" tal:condition="not:att" i18n:translate="">
+                No attachment
+              </span>
+      </dd>
+    </dl>
+  </div>
 </metal:content>
 </body>
 </html>

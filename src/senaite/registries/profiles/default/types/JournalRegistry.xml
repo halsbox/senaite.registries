@@ -24,6 +24,7 @@
   <property name="schema">senaite.registries.content.journal_registry.IJournalRegistrySchema</property>
   <property name="klass">senaite.registries.content.journal_registry.JournalRegistry</property>
   <property name="behaviors">
+    <element value="plone.app.content.interfaces.INameFromTitle"/>
     <element value="plone.app.dexterity.behaviors.metadata.IBasic"/>
     <element value="plone.app.referenceablebehavior.referenceable.IReferenceable"/>
   </property>

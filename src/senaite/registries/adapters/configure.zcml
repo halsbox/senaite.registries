@@ -1,0 +1,7 @@
+<configure xmlns="http://namespaces.zope.org/zope" i18n_domain="senaite.registries">
+  <adapter
+      for="senaite.registries.interfaces.IJournal"
+      provides="bika.lims.interfaces.IGuardAdapter"
+      factory="senaite.registries.adapters.guards.JournalGuardAdapter"
+      name="senaite.registries.adapter.guard.journal"/>
+</configure>

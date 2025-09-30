@@ -6,11 +6,18 @@ from bika.lims import api
 from senaite.core.api import dtime
 from senaite.registries import messageFactory as _
 
+_FULLNAME_REQ_CACHE_KEY = "_sr_fullname_cache"
+_STORAGE_REQ_CACHE_KEY = "_sr_storage_title_cache"
+
+
 def u(value):
   return api.safe_unicode(value)
 
+
 def icon_url(name):
+  """Return the URL of an icon name"""
   return "{}/senaite_theme/icon/{}".format(ploneapi.portal.get().absolute_url(), name)
+
 
 def format_number(number):
   """Return localized '№ <number>' or '№ n/a'."""
@@ -29,37 +36,59 @@ def format_date(dt, long_format=False, view=None, context=None):
   if not dt:
     return u""
   zdt = dtime.to_DT(dt)
-
   if view is not None and hasattr(view, "ulocalized_time"):
     return view.ulocalized_time(zdt, long_format=1 if long_format else 0)
-
   if context is not None:
     plone_tools = context.restrictedTraverse("@@plone")
     return plone_tools.toLocalizedTime(zdt, long_format=bool(long_format))
-
   return dtime.to_localized_time(zdt, long_format=bool(long_format))
 
 
-def fullname_for_userid(userid):
-  if not userid:
+def fullname_for_userid(userid, request=None):
+  """Return the fullname for a userid with optional per-request cache."""
+  cache = None
+  uid = u(userid or u"")
+  if not uid:
     return u""
-  user = ploneapi.user.get(userid=userid)
-  if not user:
-    return u(userid)
-  fullname = user.getProperty("fullname") or user.getUserName()
-  return u(fullname)
+  if request is not None:
+    cache = getattr(request, _FULLNAME_REQ_CACHE_KEY, None)
+    if cache is None:
+      cache = {}
+      setattr(request, _FULLNAME_REQ_CACHE_KEY, cache)
+    if uid in cache:
+      return cache[uid]
+  user = ploneapi.user.get(userid=uid)
+  fullname = (user.getProperty("fullname") or user.getUserName()) if user else uid
+  fullname = api.safe_unicode(fullname)
+  if request is not None and cache is not None:
+    cache[uid] = fullname
+  return fullname
 
-
-def storage_title(uid_or_list):
-  """Return the title or id of a StorageLocation by UID (or first UID in a list)."""
+def storage_title(uid_or_list, request=None):
+  """Return the title or id of a StorageLocation by UID (or first UID in a list),
+  with optional per-request cache.
+  """
+  cache = None
   if not uid_or_list:
     return u""
   uid = uid_or_list[0] if isinstance(uid_or_list, (list, tuple)) else uid_or_list
+  key = u(uid)
+  if request is not None:
+    cache = getattr(request, _STORAGE_REQ_CACHE_KEY, None)
+    if cache is None:
+      cache = {}
+      setattr(request, _STORAGE_REQ_CACHE_KEY, cache)
+    if key in cache:
+      return cache[key]
   try:
     target = api.get_object(uid)
   except Exception:
-    return u""
-  return u(api.get_title(target) or api.get_id(target))
+    title = u""
+  else:
+    title = u(api.get_title(target) or api.get_id(target))
+  if request is not None and cache is not None:
+    cache[key] = title
+  return title
 
 
 def stringify_exception(e):

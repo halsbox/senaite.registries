@@ -3,30 +3,47 @@ from plone import api as ploneapi
 from plone.app.dexterity.behaviors.exclfromnav import IExcludeFromNavigation
 
 from bika.lims import api
+from senaite.core.catalog import AUDITLOG_CATALOG, set_catalogs
+from senaite.core.setuphandlers import setup_other_catalogs
 from senaite.registries import logger
 from senaite.registries.config import PROFILE_ID, PRODUCT_NAME
 
 JOURNALS_ID = "journals"
-REGISTRIES_FOLDER_ID = "senaite_registries"  # or "registries" if you prefer
+REGISTRIES_FOLDER_ID = "senaite_registries"
 SITE_STRUCTURE = [
   # Tuples of (portal_type, obj_id, obj_title, parent_path, display_type)
   # If parent_path is None, assume folder_id is portal
   ("RegistriesRootFolder", "senaite_registries", "Registries", None, True),
   ("JournalRegistry", "journals", "Journals", "senaite_registries", True)
 ]
-
+CAT_INDEXES = [
+  # (catalog_id, index_name, indexed_attribute, index_type)
+  ("portal_catalog", "responsible", "", "FieldIndex"),
+]
+CAT_COLUMNS = [
+  # (catalog_id, column_name)
+  ("portal_catalog", "responsible"),
+]
 
 def post_install(portal_setup):
   logger.info("{} install handler [BEGIN]".format(PRODUCT_NAME.upper()))
   context = portal_setup._getImportContext(PROFILE_ID)
-  portal = context.getSite()  # noqa
-
+  portal = context.getSite()
   # (re)create structure and ensure nav visibility
   setup_site_structure(portal)
-
-  # IMPORTANT: recatalog existing objects that were hard-uncataloged on uninstall
+  # Recatalog existing objects that were hard-uncataloged on uninstall
   reindex_registries_structure(portal)
-
+  # Setup ID formatting for Journals
+  setup_id_formatting_for_journals(portal)
+  # Map catalogs
+  setup_catalog_mappings_for_registries(portal)
+  # Ensure portal_catalog has 'responsible' index/column
+  try:
+    setup_other_catalogs(portal, indexes=CAT_INDEXES, columns=CAT_COLUMNS)
+  except Exception as e:
+    logger.warn("Failed to setup extra catalog indexes: %s", e)
+  # rebuild the auditlog catalog so existing objects appear
+  rebuild_auditlog_catalog()
   logger.info("{} install handler [DONE]".format(PRODUCT_NAME.upper()))
 
 
@@ -68,7 +85,6 @@ def display_in_nav(obj):
   if portal_type not in to_display:
     ploneapi.portal.set_registry_record(registry_id, to_display + (portal_type,))
 
-  # ensure the object is not excluded from nav
   nav_exclude = IExcludeFromNavigation(obj, None)
   if nav_exclude:
     nav_exclude.exclude_from_nav = False
@@ -76,7 +92,6 @@ def display_in_nav(obj):
 
 
 def reindex_registries_structure(portal):
-  """Recatalog the registries subtree so the sidebar/menu can see it again."""
   logger.info("*** Reindex registries structure ***")
   root = getattr(portal, "senaite_registries", None)
   if not root:
@@ -104,6 +119,45 @@ def reindex_registries_structure(portal):
   reindex(root, recurse=False)
 
 
+def setup_catalog_mappings_for_registries(portal):
+  try:
+    # Journals: portal_catalog + global audit log
+    set_catalogs("Journal", ["portal_catalog", AUDITLOG_CATALOG])
+    logger.info("Mapped Journal to ['portal_catalog', '%s']", AUDITLOG_CATALOG)
+
+    # JournalRegistry: portal_catalog only
+    set_catalogs("JournalRegistry", ["portal_catalog"])
+    logger.info("Mapped JournalRegistry to ['portal_catalog']")
+
+    # Reindex registries subtree so nav/listings see it again
+    root = getattr(portal, "senaite_registries", None)
+    if root:
+      logger.info("Reindex registries subtree for portal_catalog ...")
+
+      def walk(obj):
+        obj.reindexObject()
+        ov = getattr(obj, "objectValues", None)
+        if callable(ov):
+          for child in ov():
+            walk(child)
+
+      walk(root)
+      logger.info("Reindex of registries subtree [DONE]")
+  except Exception as e:
+    logger.warn("Catalog mapping or reindex failed: %s", e)
+
+
+def rebuild_auditlog_catalog():
+  try:
+    cat = api.get_tool(AUDITLOG_CATALOG)
+    if cat:
+      logger.info("Rebuilding auditlog catalog ...")
+      cat.clearFindAndRebuild()
+      logger.info("Rebuilding auditlog catalog [DONE]")
+  except Exception as e:
+    logger.warn("Auditlog catalog rebuild failed: %s", e)
+
+
 def pre_install(portal_setup):
   pass
 
@@ -112,23 +166,17 @@ def post_uninstall(portal_setup):
   logger.info("SENAITE.REGISTRIES uninstall handler [BEGIN]")
   portal = portal_setup._getImportContext(
     "profile-senaite.registries:uninstall").getSite()
-
   # Hard-uncatalog (by path) from core catalogs
   hard_uncatalog_registries_structure(portal)
-
-  # Remove our types from Plone’s displayed types
+  # Remove types from Plone’s displayed types
   cleanup_displayed_types()
-
-  # Optional: hide the root (if still present)
+  # Hide the root (if still present)
   hide_registries_root(portal)
-
   logger.info("SENAITE.REGISTRIES uninstall handler [DONE]")
 
 
 def hard_uncatalog_registries_structure(portal):
-  """Uncatalog by path from ZCatalogs (FTIs not required)."""
   logger.info("*** Hard-uncatalog registries structure ***")
-
   registries = getattr(portal, "senaite_registries", None)
   if not registries:
     logger.info("No 'senaite_registries' container found [SKIP]")
@@ -190,3 +238,20 @@ def hide_registries_root(portal):
         root.reindexObject(idxs=["exclude_from_nav"])
       except Exception:
         pass
+
+
+def setup_id_formatting_for_journals(portal):
+  bs = portal.bika_setup
+  fmt = {
+    "portal_type": "Journal",  # target type
+    "form": "J{seq:06d}",  # e.g. J000001, J000002, ...
+    "prefix": "journal",  # idserver sequence key prefix
+    "sequence_type": "generated",
+    "counter_type": "",
+    "split_length": 1,
+  }
+  existing = list(bs.getIDFormatting() or [])
+  # drop duplicates for Journal
+  existing = [f for f in existing if f.get("portal_type") != "Journal"]
+  existing.append(fmt)
+  bs.setIDFormatting(existing)

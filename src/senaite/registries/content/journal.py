@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from plone import api as ploneapi
 from plone.autoform import directives
+from plone.formwidget.namedfile.widget import NamedFileWidget
+from plone.namedfile.field import NamedBlobFile
 from plone.supermodel import model
 from zope import schema
 from zope.interface import implementer
+from zope.interface import invariant, Invalid
 
 from bika.lims.catalog import SETUP_CATALOG
 from senaite.core.content.base import Item
@@ -15,6 +18,7 @@ from senaite.core.z3cform.widgets.queryselect import QuerySelectWidgetFactory
 from senaite.core.z3cform.widgets.uidreference import UIDReferenceWidgetFactory
 from senaite.registries import messageFactory as _
 from senaite.registries.interfaces import IJournal
+from senaite.registries.permissions import FieldEditResponsible
 
 
 class IJournalSchema(model.Schema):
@@ -31,13 +35,13 @@ class IJournalSchema(model.Schema):
   directives.widget("start_date", DatetimeWidget, show_time=False)
   start_date = DatetimeField(
     title=_(u"Start Date"),
-    required=True,
+    required=False,
   )
 
   directives.order_after(end_date="start_date")
   directives.widget("end_date", DatetimeWidget, show_time=False)
   end_date = DatetimeField(
-    title=u"End Date",
+    title=_(u"End Date"),
     required=False,
   )
 
@@ -59,8 +63,9 @@ class IJournalSchema(model.Schema):
     ],
     limit=10,
   )
+  directives.write_permission(responsible=FieldEditResponsible)
   responsible = schema.TextLine(
-    title=u"Responsible user",
+    title=_(u"Responsible user"),
     description=u"User responsible for maintaining the journal",
     required=True,
   )
@@ -73,9 +78,9 @@ class IJournalSchema(model.Schema):
     query={"is_active": True, "sort_on": "sortable_title", "sort_order": "ascending"},
   )
   storage_location_active = UIDReferenceField(
-    title=u"Storage location in use",
+    title=_(u"Storage location in use"),
     description=u"Select the storage location of the journal while in active use",
-    required=True,
+    required=False,
     multi_valued=False,
     allowed_types=("StorageLocation",),
   )
@@ -103,12 +108,45 @@ class IJournalSchema(model.Schema):
     query={"is_active": True, "sort_on": "sortable_title", "sort_order": "ascending"},
   )
   storage_location_archive = UIDReferenceField(
-    title=u"Storage location (archive)",
+    title=_(u"Storage location (archive)"),
     description=u"Storage location after moving the journal to archive",
     required=False,
     multi_valued=False,
     allowed_types=("StorageLocation",),
   )
+  directives.order_after(attachment="storage_location_archive")
+  directives.widget("attachment", NamedFileWidget)
+  attachment = NamedBlobFile(
+    title=_(u"Attachment"),
+    description=_(u"Upload a scanned file for this journal"),
+    required=False,
+  )
+
+  @invariant
+  def validate_dates_and_storages(data):
+    sd = getattr(data, "start_date", None)
+    ed = getattr(data, "end_date", None)
+    s_act = getattr(data, "storage_location_active", u"") or u""
+    s_pre = getattr(data, "storage_location_pre_archive", u"") or u""
+    s_arc = getattr(data, "storage_location_archive", u"") or u""
+
+    # If end_date set → start_date must exist and end >= start
+    if ed:
+      if not sd:
+        raise Invalid(_(u"Start date must be set when End date is set"))
+      if ed < sd:
+        raise Invalid(_(u"End date cannot be earlier than Start date"))
+      # If the Journal is effectively “ended”, require pre-archive storage
+      if not s_pre:
+        raise Invalid(_(u"Pre-archive storage must be set when End date is set"))
+
+    # If archive storage set → Journal must be “ended” first
+    if s_arc and not ed:
+      raise Invalid(_(u"Archive storage requires an End date"))
+
+    # If start_date set → active storage must exist
+    if sd and not s_act:
+      raise Invalid(_(u"Active storage must be set when Start date is set"))
 
 
 @implementer(IJournal, IJournalSchema)

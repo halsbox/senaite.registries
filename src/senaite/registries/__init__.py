@@ -21,7 +21,9 @@ def check_installed(default_return):
       if not is_installed():
         return default_return
       return func(*args, **kwargs)
+
     return wrapped
+
   return decorator
 
 

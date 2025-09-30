@@ -1,6 +1,42 @@
 <?xml version="1.0"?>
 <rolemap>
   <permissions>
-    <!-- All permissions will be inherited from senaite.core and Plone -->
+    <!-- Manage registries -->
+    <permission name="senaite.registries: Manage Registries" acquire="False">
+      <role name="LabManager"/>
+      <role name="Manager"/>
+    </permission>
+
+    <!-- Add Journal -->
+    <permission name="senaite.registries: Add Journal" acquire="False">
+      <role name="LabClerk"/>
+      <role name="LabManager"/>
+      <role name="Manager"/>
+    </permission>
+
+    <!-- Field permissions -->
+    <permission name="senaite.registries: Field: Edit Responsible" acquire="False">
+      <role name="LabManager"/>
+      <role name="Manager"/>
+    </permission>
+
+    <!-- Transition permissions -->
+    <permission name="senaite.registries: Transition: Start Using" acquire="False">
+      <role name="LabClerk"/>
+      <role name="LabManager"/>
+      <role name="Manager"/>
+    </permission>
+    <permission name="senaite.registries: Transition: End Using" acquire="False">
+      <role name="LabClerk"/>
+      <role name="LabManager"/>
+      <role name="Manager"/>
+    </permission>
+    <permission name="senaite.registries: Transition: Archive" acquire="False">
+      <role name="LabManager"/>
+      <role name="Manager"/>
+    </permission>
+    <permission name="senaite.registries: Transition: Unarchive" acquire="False">
+      <role name="Manager"/>
+    </permission>
   </permissions>
 </rolemap>

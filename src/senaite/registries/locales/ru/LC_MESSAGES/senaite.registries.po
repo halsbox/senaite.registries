@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2025-09-25 21:38+0000\n"
+"POT-Creation-Date: 2025-09-30 21:45+0000\n"
 "PO-Revision-Date: 2025-09-25 21:38+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: Russian (Russia) (https://app.transifex.com/senaite/teams/87045/ru_RU/)\n"
+"Language-Team: Halsbox(hal@halsbox.io)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,30 +23,62 @@ msgstr "Запись журнала."
 msgid "A registry for Journal entries."
 msgstr "Реестр записей журнала."
 
-#: senaite/registries/browser/registry/view.py:40
-msgid "Actions"
-msgstr "Действия"
+#: senaite/registries/browser/registry/view.py:64
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_registry_workflow/definition.xml
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "Active"
+msgstr "Активный"
 
-#: senaite/registries/browser/registry/view.py:25
+#: senaite/registries/content/journal.py:149
+msgid "Active storage must be set when Start date is set"
+msgstr "Должно быть указано активное место хранения при заданной дате начала"
+
+#: senaite/registries/browser/registry/view.py:43
 msgid "Add journal"
 msgstr "Добавить журнал"
 
-#: senaite/registries/browser/registry/view.py:44
+#: senaite/registries/browser/registry/view.py:52
 msgid "All"
 msgstr "Все"
 
-#: senaite/registries/browser/registry/view.py:67
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "Archive"
+msgstr "Архивировать"
+
+#: senaite/registries/content/journal.py:145
+msgid "Archive storage requires an End date"
+msgstr "Место хранения в архиве требует указанной даты окончания"
+
+#: senaite/registries/browser/registry/view.py:76
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "Archived"
+msgstr "Архивирован"
+
+#: senaite/registries/browser/journal/templates/view.pt:34
+#: senaite/registries/content/journal.py:120
+msgid "Attachment"
+msgstr "Вложение"
+
+#: senaite/registries/browser/registry/view.py:103
 msgid "Delete"
 msgstr "Удалить"
 
-#: senaite/registries/browser/registry/view.py:65
-msgid "Edit"
-msgstr "Редактировать"
+#: senaite/registries/content/journal.py:44
+msgid "End Date"
+msgstr "Дата окончания"
 
-#: senaite/registries/browser/journal/templates/view.pt:20
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "End Using"
+msgstr "Завершить использование"
+
+#: senaite/registries/browser/journal/templates/view.pt:19
 #: senaite/registries/browser/registry/view.py:35
 msgid "End date"
 msgstr "Дата окончания"
+
+#: senaite/registries/content/journal.py:138
+msgid "End date cannot be earlier than Start date"
+msgstr "Дата окончания не может быть раньше даты начала"
 
 #: senaite/registries/profiles/default/types/Journal.xml
 msgid "Journal"
@@ -56,49 +88,83 @@ msgstr "Журнал"
 msgid "Journal Registry"
 msgstr "Реестр журналов"
 
-#: senaite/registries/content/journal.py:25
+#: senaite/registries/content/journal.py:29
 msgid "Journal number between 1 and 100"
 msgstr "Номер журнала от 1 до 100"
 
-#: senaite/registries/browser/journal/templates/view.pt:14
+#: senaite/registries/browser/registry/view.py:58
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "New"
+msgstr "Новый"
+
+#: senaite/registries/browser/journal/templates/view.pt:42
+msgid "No attachment"
+msgstr "Нет вложения"
+
+#: senaite/registries/browser/root/templates/view.pt:34
+msgid "No registries available."
+msgstr "Нет доступных реестров"
+
+#: senaite/registries/browser/journal/templates/view.pt:13
 #: senaite/registries/browser/registry/view.py:33
-#: senaite/registries/content/journal.py:24
+#: senaite/registries/content/journal.py:28
 msgid "Number"
 msgstr "Номер"
+
+#: senaite/registries/browser/registry/view.py:70
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "Pre-archive"
+msgstr "Предархивация"
+
+#: senaite/registries/content/journal.py:141
+msgid "Pre-archive storage must be set when End date is set"
+msgstr "Должно быть указано место хранения до архивации при заданной дате окончания"
 
 #: senaite/registries/profiles/default/types/RegistriesRootFolder.xml
 msgid "Registries"
 msgstr "Реестры"
 
-#: senaite/registries/browser/journal/templates/view.pt:23
+#: senaite/registries/browser/journal/templates/view.pt:22
 #: senaite/registries/browser/registry/view.py:36
 msgid "Responsible"
 msgstr "Ответственный"
+
+#: senaite/registries/content/journal.py:68
+msgid "Responsible user"
+msgstr "Ответственный пользователь"
 
 #: senaite/registries/profiles/default/types/RegistriesRootFolder.xml
 msgid "Root folder for registries"
 msgstr "Корневая папка для реестров"
 
-#: senaite/registries/content/journal.py:33
+#: senaite/registries/content/journal.py:37
 msgid "Start Date"
 msgstr "Дата начала"
 
-#: senaite/registries/browser/journal/templates/view.pt:17
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "Start Using"
+msgstr "Начать использование"
+
+#: senaite/registries/browser/journal/templates/view.pt:16
 #: senaite/registries/browser/registry/view.py:34
 msgid "Start date"
 msgstr "Дата начала"
 
-#: senaite/registries/browser/journal/templates/view.pt:26
+#: senaite/registries/content/journal.py:136
+msgid "Start date must be set when End date is set"
+msgstr "При заданной дате окончания должна быть указана дата начала"
+
+#: senaite/registries/browser/journal/templates/view.pt:25
 #: senaite/registries/browser/registry/view.py:37
 msgid "Storage (active)"
 msgstr "Хранение (активный)"
 
-#: senaite/registries/browser/journal/templates/view.pt:32
+#: senaite/registries/browser/journal/templates/view.pt:31
 #: senaite/registries/browser/registry/view.py:39
 msgid "Storage (archive)"
 msgstr "Хранение (архив)"
 
-#: senaite/registries/browser/journal/templates/view.pt:29
+#: senaite/registries/browser/journal/templates/view.pt:28
 msgid "Storage (before archive)"
 msgstr "Хранение (до архивации)"
 
@@ -106,18 +172,30 @@ msgstr "Хранение (до архивации)"
 msgid "Storage (pre-archive)"
 msgstr "Хранение (до архивации)"
 
+#: senaite/registries/content/journal.py:111
+msgid "Storage location (archive)"
+msgstr "Место хранения (архив)"
+
+#: senaite/registries/content/journal.py:81
+msgid "Storage location in use"
+msgstr "Место хранения в использовании"
+
 #: senaite/registries/browser/registry/view.py:32
 msgid "Title"
 msgstr "Название"
 
-#: senaite/registries/browser/registry/view.py:63
-msgid "View"
-msgstr "Просмотр"
+#: senaite/registries/profiles/default/workflows/senaite_registries_journal_workflow/definition.xml
+msgid "Unarchive"
+msgstr "Разархивировать"
 
-#: senaite/registries/browser/common.py:11
+#: senaite/registries/content/journal.py:121
+msgid "Upload a scanned file for this journal"
+msgstr "Загрузите отсканированный файл для этого журнала"
+
+#: senaite/registries/browser/common.py:25
 msgid "№ ${number}"
 msgstr "№ ${number}"
 
-#: senaite/registries/browser/common.py:12
+#: senaite/registries/browser/common.py:26
 msgid "№ n/a"
 msgstr "№ н/д"

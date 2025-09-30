@@ -10,6 +10,7 @@ from zope.interface import alsoProvides
 from bika.lims import api
 from bika.lims.catalog import SETUP_CATALOG
 from senaite.core.api import dtime
+from senaite.core.browser.usergroup.usergroups_usersoverview import UsersOverviewControlPanel
 from senaite.registries import logger
 from senaite.registries.browser.common import (
   normalize,
@@ -17,11 +18,56 @@ from senaite.registries.browser.common import (
   get_bool,
   stringify_exception,
 )
-from senaite.core.browser.usergroup.usergroups_usersoverview import UsersOverviewControlPanel
 
-# Required fields for a Journal import row
-REQUIRED_FIELDS = ("title", "number", "start_date", "responsible", "storage_active")
-OPTIONAL_FIELDS = ("description", "end_date", "storage_pre", "storage_archive")
+REQUIRED_FIELDS = ("title", "number", "responsible")
+OPTIONAL_FIELDS = ("description", "start_date", "end_date", "storage_active", "storage_pre", "storage_archive")
+
+
+def infer_target_state_from_row(row):
+  # archived if archive storage present (requires end date)
+  if row.get("storage_archive"):
+    return "archived"
+  # pre-archive if end_date or pre-archive storage present
+  if row.get("end_date") or row.get("storage_pre"):
+    return "pre_archive"
+  # active if start_date or active storage present
+  if row.get("start_date") or row.get("storage_active"):
+    return "active"
+  return "new"
+
+
+def apply_state(obj, target_state):
+  """Transition obj to target_state by executing the required transitions."""
+  current = api.get_review_status(obj)
+  if current == target_state:
+    return
+
+  def do(tid):
+    # Will raise if permission/guards fail; caller catches and reports
+    api.do_transition_for(obj, tid)
+
+  # Drive transitions in order
+  if target_state == "active":
+    if current == "new":
+      do("start_using")
+
+  elif target_state == "pre_archive":
+    if current == "new":
+      do("start_using")
+      do("end_using")
+    elif current == "active":
+      do("end_using")
+
+  elif target_state == "archived":
+    if current == "new":
+      do("start_using")
+      do("end_using")
+      do("archive")
+    elif current == "active":
+      do("end_using")
+      do("archive")
+    elif current == "pre_archive":
+      do("archive")
 
 
 def _read_request_body(body_candidate):
@@ -225,7 +271,7 @@ class JournalImportAPI(BrowserView):
         row["responsible"] = self.resolve_user(row["responsible"])
 
         # Resolve storages to UIDs
-        row["storage_active"] = resolve_storage(row["storage_active"], required=True)
+        row["storage_active"] = resolve_storage(row["storage_active"], required=False)
         row["storage_pre"] = resolve_storage(row.get("storage_pre"), required=False)
         row["storage_archive"] = resolve_storage(row.get("storage_archive"), required=False)
 
@@ -234,12 +280,26 @@ class JournalImportAPI(BrowserView):
           continue
 
         obj = self.create_journal(row)
+        # Infer and apply desired lifecycle
+        target = infer_target_state_from_row(row)
+        try:
+          apply_state(obj, target)
+        except Exception as e:
+          # Keep the object but report state sync error
+          results.append({
+            "index": idx,
+            "status": "warn",
+            "message": u"Created but failed to set state '{}': {}".format(target, stringify_exception(e)),
+            "url": api.get_url(obj),
+          })
+          continue
         created += 1
         results.append({
           "index": idx,
           "status": "ok",
           "message": u"Created: {}".format(api.get_title(obj)),
           "url": api.get_url(obj),
+          "state": api.get_review_status(obj),
         })
 
       except Exception as e:
@@ -316,7 +376,6 @@ class JournalImportAPI(BrowserView):
     if row.get("description"):
       obj.setDescription(row["description"])
 
-    # Set fields; adapt to your schema (AT/DEX) if needed
     setattr(obj, "number", row["number"])
     setattr(obj, "start_date", row["start_date"])
     setattr(obj, "end_date", row.get("end_date") or None)

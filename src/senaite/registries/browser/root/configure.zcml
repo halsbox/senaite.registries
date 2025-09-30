@@ -1,0 +1,13 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="senaite.registries">
+
+  <browser:page
+      for="senaite.registries.interfaces.IRegistriesRootFolder"
+      name="view"
+      class=".view.RegistriesRootView"
+      template="templates/view.pt"
+      permission="zope2.View"
+      layer="senaite.registries.interfaces.ISenaiteRegistriesLayer"/>
+</configure>

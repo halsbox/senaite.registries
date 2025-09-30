@@ -1,0 +1,5 @@
+<configure xmlns="http://namespaces.zope.org/zope" i18n_domain="senaite.registries">
+  <subscriber
+      for="Products.DCWorkflow.interfaces.IAfterTransitionEvent"
+      handler="senaite.registries.subscribers.journal.on_journal_transition"/>
+</configure>
