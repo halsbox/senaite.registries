@@ -33,6 +33,7 @@ class RegistriesRootView(BrowserView):
       items.append({
         "id": api.get_id(child),
         "portal_type": pt,
+        "title": api.get_title(child) or api.get_id(child),
         "url": api.get_url(child),
         "icon": icon_url(icon_name),
       })

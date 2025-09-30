@@ -20,9 +20,6 @@
                  tal:content="reg/title">Journals
             </div>
           </a>
-          <div class="text-muted small"
-               tal:condition="reg/description"
-               tal:content="reg/description"></div>
         </div>
       </tal:loop>
 
