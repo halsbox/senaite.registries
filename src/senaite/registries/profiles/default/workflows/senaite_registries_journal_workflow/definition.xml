@@ -87,7 +87,6 @@
   <!-- State: pre_archive -->
   <state state_id="pre_archive" title="Pre-archive" i18n:attributes="title">
     <exit-transition transition_id="archive"/>
-    <exit-transition transition_id="resume_using"/>
     <permission-map name="Access contents information" acquired="False">
       <permission-role>LabClerk</permission-role>
       <permission-role>LabManager</permission-role>

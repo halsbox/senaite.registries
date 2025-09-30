@@ -1,5 +1,4 @@
 include LICENSE
-include *.rst
 include *.md
 exclude MANIFEST.in
 recursive-exclude docker *

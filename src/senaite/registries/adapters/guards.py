@@ -25,10 +25,6 @@ class JournalGuardAdapter(object):
     return bool(getattr(self.context, "storage_location_pre_archive", u"") or
                 getattr(self.context, "end_date", None))
 
-  def guard_resume_using(self):
-    # pre_archive -> active (allow moving back only if active storage present)
-    return bool(getattr(self.context, "storage_location_active", u""))
-
   def guard_archive(self):
     # pre_archive -> archived requires archive storage
     return bool(getattr(self.context, "storage_location_archive", u""))

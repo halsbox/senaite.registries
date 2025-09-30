@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 
-version = "1.1.0"
+version = "1.1.1"
 
 setup(
   name="senaite.registries",
   version=version,
   description="Registries management add-on for SENAITE LIMS",
-  long_description=open("README.rst").read() if hasattr(open, '__call__') else "",
+  long_description=open("README.md").read() if hasattr(open, '__call__') else "",
   classifiers=[
     "Framework :: Plone",
     "Framework :: Zope2",
